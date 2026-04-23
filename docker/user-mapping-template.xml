@@ -1,0 +1,26 @@
+<user-mapping>
+    <authorize username="$USER_NAME" password="$USER_PASSWORD">
+        <connection name="desktop">
+            <protocol>rdp</protocol>
+            <param name="hostname">127.0.0.1</param>
+            <param name="port">3389</param>
+            <param name="security">rdp</param>
+            <param name="ignore-cert">true</param>
+            <param name="color-depth">24</param>
+            <param name="server-layout">ja-jp-qwerty</param>
+            <param name="enable-wallpaper">false</param>
+            <param name="enable-theming">false</param>
+            <param name="enable-font-smoothing">false</param>
+            <param name="enable-full-window-drag">false</param>
+            <param name="enable-desktop-composition">false</param>
+            <param name="enable-menu-animations">false</param>
+            <param name="username">$USER_NAME</param>
+            <param name="password">$USER_PASSWORD</param>
+            <param name="enable-audio-input">false</param>
+            <param name="enable-audio">true</param>
+            <param name="resize-method">display-update</param>
+            <param name="enable-drive">false</param>
+            <param name="enable-printing">false</param>
+        </connection>
+    </authorize>
+</user-mapping>

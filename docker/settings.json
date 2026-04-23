@@ -1,0 +1,51 @@
+{
+  "security.workspace.trust.emptyWindow": false,
+  "security.workspace.trust.banner": "always",
+  "security.workspace.trust.enabled": false,
+  "security.workspace.trust.startupPrompt": "always",
+  "workbench.editor.restoreViewState": false,
+  "files.restoreUndoStack": false,
+  "zenMode.restore": false,
+  "remote.restoreForwardedPorts": false,
+  "workbench.commandPalette.history": 0,
+  "workbench.localHistory.enabled": false,
+  "workbench.localHistory.maxFileEntries": 0,
+  "search.quickOpen.includeHistory": false,
+  "debug.console.historySuggestions": false,
+  "terminal.integrated.shellIntegration.history": 0,
+  "[markdown]": {
+    "editor.wordWrap": "off"
+  },
+  "editor.tabSize": 2,
+  "editor.formatOnPaste": true,
+  "editor.inertialScroll": true,
+  "editor.formatOnType": true,
+  "terminal.integrated.defaultLocation": "editor",
+  "telemetry.telemetryLevel": "off",
+  "cmake.automaticReconfigure": false,
+  "update.mode": "none",
+  "extensions.autoCheckUpdates": false,
+  "extensions.autoUpdate": false,
+  "cmake.exportCompileCommandsFile": true,
+  "clangd.arguments": [
+    "--compile-commands-dir=${workspaceFolder}/build",
+    "--header-insertion=iwyu",
+    "--completion-style=detailed"
+  ],
+  "editor.defaultFormatter": "llvm-vs-code-extensions.vscode-clangd",
+  "editor.formatOnSave": true,
+  "cmake.debugConfig": {
+    "type": "lldb",
+    "request": "launch",
+    "stdio": [
+      null,
+      null,
+      null
+    ],
+    "initCommands": [
+      "settings set target.disable-aslr false"
+    ]
+  },
+  "workbench.colorTheme": "Dark Modern",
+  "window.menuBarVisibility": "classic"
+}
