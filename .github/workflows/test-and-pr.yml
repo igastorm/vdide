@@ -82,13 +82,24 @@ jobs:
         run: |
           PR_EXISTS=$(gh pr list --base main --head test --json number --jq 'length')
           
-          if [ "$PR_EXISTS" -eq "0" ]; then
-            gh pr create \
+          if[ "$PR_EXISTS" -eq "0" ]; then
+            echo "Attempting to create Pull Request..."
+            if ! OUTPUT=$(gh pr create \
               --base main \
               --head test \
-              --title " Auto PR: Update from test" \
-              --body "It has passed the build and container startup tests (health checks and log analysis) on the 'test' branch."
-            echo "Pull Request created."
+              --title "Auto PR: Update from test" \
+              --body "It has passed the build and container startup tests (health checks and log analysis) on the 'test' branch." 2>&1); then
+              
+              if echo "$OUTPUT" | grep -q "No commits between"; then
+                echo "No commits between main and test. Skipping PR creation."
+                exit 0
+              else
+                echo "Failed to create PR: $OUTPUT"
+                exit 1
+              fi
+            else
+              echo "Pull Request created successfully."
+            fi
           else
             echo "Pull Request already exists. Skipping creation."
           fi
