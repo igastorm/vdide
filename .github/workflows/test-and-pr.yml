@@ -82,7 +82,7 @@ jobs:
         run: |
           PR_EXISTS=$(gh pr list --base main --head test --json number --jq 'length')
           
-          if[ "$PR_EXISTS" -eq "0" ]; then
+          if [ "$PR_EXISTS" -eq "0" ]; then
             echo "Attempting to create Pull Request..."
             if ! OUTPUT=$(gh pr create \
               --base main \
