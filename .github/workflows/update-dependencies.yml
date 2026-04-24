@@ -1,0 +1,80 @@
+name: Auto Update Dependencies
+
+on:
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+jobs:
+  check-updates:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: test
+
+      - name: Update code-server
+        id: cs
+        run: |
+          LATEST=$(curl -s https://api.github.com/repos/coder/code-server/releases/latest | jq -r .tag_name | sed 's/v//')
+          CURRENT=$(grep "ARG CODE_SERVER_VERSION=" docker/Dockerfile | cut -d'=' -f2)
+          if [ "$LATEST" != "$CURRENT" ]; then
+            echo "Updating code-server to $LATEST"
+            curl -L -o cs_amd64.tar.gz "https://github.com/coder/code-server/releases/download/v${LATEST}/code-server-${LATEST}-linux-amd64.tar.gz"
+            curl -L -o cs_arm64.tar.gz "https://github.com/coder/code-server/releases/download/v${LATEST}/code-server-${LATEST}-linux-arm64.tar.gz"
+            
+            SHA_AMD64=$(sha512sum cs_amd64.tar.gz | awk '{print $1}')
+            SHA_ARM64=$(sha512sum cs_arm64.tar.gz | awk '{print $1}')
+            
+            sed -i "s/ARG CODE_SERVER_VERSION=.*/ARG CODE_SERVER_VERSION=$LATEST/" docker/Dockerfile
+            sed -i "s/ARG CODE_SERVER_AMD64_SHA512=.*/ARG CODE_SERVER_AMD64_SHA512=$SHA_AMD64/" docker/Dockerfile
+            sed -i "s/ARG CODE_SERVER_ARM64_SHA512=.*/ARG CODE_SERVER_ARM64_SHA512=$SHA_ARM64/" docker/Dockerfile
+            echo "updated=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Update CodeLLDB
+        id: lldb
+        run: |
+          LATEST=$(curl -s https://api.github.com/repos/vadimcn/codelldb/releases/latest | jq -r .tag_name | sed 's/v//')
+          CURRENT=$(grep "ARG CODELLDB_VERSION=" docker/Dockerfile | cut -d'=' -f2)
+          if [ "$LATEST" != "$CURRENT" ]; then
+            echo "Updating CodeLLDB to $LATEST"
+            curl -L -o lldb_x64.vsix "https://github.com/vadimcn/codelldb/releases/download/v${LATEST}/codelldb-linux-x64.vsix"
+            curl -L -o lldb_arm64.vsix "https://github.com/vadimcn/codelldb/releases/download/v${LATEST}/codelldb-linux-arm64.vsix"
+            
+            SHA_X64=$(sha512sum lldb_x64.vsix | awk '{print $1}')
+            SHA_ARM64=$(sha512sum lldb_arm64.vsix | awk '{print $1}')
+            
+            sed -i "s/ARG CODELLDB_VERSION=.*/ARG CODELLDB_VERSION=$LATEST/" docker/Dockerfile
+            sed -i "s/ARG CODELLDB_X64_SHA512=.*/ARG CODELLDB_X64_SHA512=$SHA_X64/" docker/Dockerfile
+            sed -i "s/ARG CODELLDB_ARM64_SHA512=.*/ARG CODELLDB_ARM64_SHA512=$SHA_ARM64/" docker/Dockerfile
+            echo "updated=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Update GoogleTest
+        id: gtest
+        run: |
+          LATEST=$(curl -s https://api.github.com/repos/google/googletest/releases/latest | jq -r .tag_name | sed 's/v//')
+          CURRENT=$(grep "ARG GTEST_VERSION=" docker/Dockerfile | cut -d'=' -f2)
+          if [ "$LATEST" != "$CURRENT" ]; then
+            echo "Updating GoogleTest to $LATEST"
+            curl -L -o gtest.tar.gz "https://github.com/google/googletest/archive/refs/tags/v${LATEST}.tar.gz"
+            
+            SHA_GTEST=$(sha512sum gtest.tar.gz | awk '{print $1}')
+            
+            sed -i "s/ARG GTEST_VERSION=.*/ARG GTEST_VERSION=$LATEST/" docker/Dockerfile
+            sed -i "s/ARG GTEST_SHA512=.*/ARG GTEST_SHA512=$SHA_GTEST/" docker/Dockerfile
+            echo "updated=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Commit and Push
+        if: steps.cs.outputs.updated == 'true' || steps.lldb.outputs.updated == 'true' || steps.gtest.outputs.updated == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add docker/Dockerfile
+          git commit -m "chore: auto update dependencies (code-server, codelldb, gtest)"
+          git push origin test
