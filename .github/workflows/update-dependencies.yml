@@ -16,6 +16,12 @@ jobs:
         with:
           ref: test
 
+      - name: Sync with latest test branch
+        run: |
+          git fetch origin test
+          git checkout test
+          git pull --rebase origin test
+
       - name: Update code-server
         id: cs
         run: |
