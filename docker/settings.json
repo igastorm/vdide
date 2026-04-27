@@ -47,5 +47,15 @@
     ]
   },
   "workbench.colorTheme": "Dark Modern",
-  "window.menuBarVisibility": "classic"
+  "window.menuBarVisibility": "classic",
+  "python.languageServer": "Default",
+  "python.analysis.typeCheckingMode": "basic",
+  "[python]": {
+    "editor.defaultFormatter": "charliermarsh.ruff",
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.fixAll": "explicit",
+      "source.organizeImports": "explicit"
+    }
+  }
 }
