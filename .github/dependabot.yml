@@ -5,6 +5,19 @@ updates:
     schedule:
       interval: "weekly"
     target-branch: "test"
+    groups:
+      actions:
+        patterns:
+          - "*"
     commit-message:
       prefix: "ci"
+      include: "scope"
+
+  - package-ecosystem: "docker"
+    directory: "/docker"
+    schedule:
+      interval: "weekly"
+    target-branch: "test"
+    commit-message:
+      prefix: "build"
       include: "scope"
