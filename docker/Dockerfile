@@ -240,19 +240,18 @@ RUN cp /tmp/pa-modules/* /usr/lib/pulse-*/modules/ && rm -rf /tmp/pa-modules && 
   echo "Hidden=true" >> /usr/share/applications/xfce4-session-logout.desktop && \
   echo "Hidden=true" >> /usr/share/applications/xfce4-web-browser.desktop && \
   echo "Hidden=true" >> /usr/share/applications/org.fcitx.fcitx5-migrator.desktop && \
-  sed -i 's/TerminalEmulator=debian-x-terminal-emulator/TerminalEmulator=xfce4-terminal/' /etc/xdg/xfce4/helpers.rc && \
-  mkdir -p /.config
+  sed -i 's/TerminalEmulator=debian-x-terminal-emulator/TerminalEmulator=xfce4-terminal/' /etc/xdg/xfce4/helpers.rc
 
 # ヘルスチェック
 HEALTHCHECK --interval=30s --timeout=5s --start-period=15s --retries=3 \
   CMD ["sh", "-c", "curl -fsS http://localhost:8080 -o /dev/null && curl -fsS http://localhost:3000 -o /dev/null || exit 1"]
 
-COPY entrypoint.sh /.config/entrypoint.sh
-COPY supervisord-template.conf /.config/supervisord-template.conf
-COPY user-mapping-template.xml /.config/user-mapping-template.xml
-COPY settings.json /.config/settings.json
-COPY desktop-setup.sh /.config/desktop-setup.sh
-RUN chmod +x /.config/desktop-setup.sh && chmod +x /.config/entrypoint.sh
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+COPY supervisord-template.conf /usr/local/etc/supervisord-template.conf
+COPY user-mapping-template.xml /usr/local/etc/user-mapping-template.xml
+COPY settings.json /usr/local/etc/settings.json
+COPY desktop-setup.sh /usr/local/bin/desktop-setup.sh
+RUN chmod +x /usr/local/bin/desktop-setup.sh && chmod +x /usr/local/bin/entrypoint.sh
 # ==========================================
 # code-server (更新が多めなので後ろに記述)
 # ==========================================
@@ -302,4 +301,4 @@ RUN ARCH=$(uname -m) && \
 
 EXPOSE 8080
 EXPOSE 3000
-ENTRYPOINT ["/usr/bin/tini", "--", "/.config/entrypoint.sh"]
+ENTRYPOINT ["/usr/bin/tini", "--", "/usr/local/bin/entrypoint.sh"]
