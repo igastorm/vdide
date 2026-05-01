@@ -29,10 +29,14 @@ ARG CODELLDB_X64_SHA512=8076083c0303101edb46f7bf1ebe88d10c41ef9c399a245af8d30a25
 ARG CODELLDB_ARM64_SHA512=d38a7a484c165638a5675a22b8e3fc9bda35f2c8cd2c72c290531f2c17a5ad800713d04f4a772e860e775c290b497fecfa78fd012166de9c3bd46e13f7ae0e06
 
 # ==========================================
+# Base image (common)
+# ==========================================
+FROM debian:trixie-slim@sha256:cedb1ef40439206b673ee8b33a46a03a0c9fa90bf3732f54704f99cb061d2c5a AS base
+
+# ==========================================
 # Stage 1: Base Builder (共通ビルド環境)
 # ==========================================
-ARG BASE_IMAGE=debian:trixie-slim@sha256:cedb1ef40439206b673ee8b33a46a03a0c9fa90bf3732f54704f99cb061d2c5a
-FROM ${BASE_IMAGE} AS base-builder
+FROM base AS base-builder
 
 ENV DEBIAN_FRONTEND=noninteractive
 RUN sed -i 's/^Types: deb$/Types: deb deb-src/' /etc/apt/sources.list.d/debian.sources && \
@@ -112,7 +116,7 @@ RUN wget https://archive.apache.org/dist/tomcat/tomcat-9/v${TOMCAT_VERSION}/bin/
 # ==========================================
 # Stage 6: Aggregator & Stripper (成果物の集約と軽量化)
 # ==========================================
-FROM ${BASE_IMAGE} AS final-builder
+FROM base AS final-builder
 
 RUN apt-get update && apt-get install -y --no-install-recommends binutils file && rm -rf /var/lib/apt/lists/*
 
@@ -137,7 +141,7 @@ RUN find /usr/local/bin /usr/local/sbin /usr/local/lib /usr/local/apr/lib -type 
 # ==========================================
 # Stage 7: Runtime
 # ==========================================
-FROM ${BASE_IMAGE}
+FROM base
 
 ARG GTEST_VERSION
 ARG GTEST_SHA512
