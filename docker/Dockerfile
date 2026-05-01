@@ -240,7 +240,7 @@ RUN cp /tmp/pa-modules/* /usr/lib/pulse-*/modules/ && rm -rf /tmp/pa-modules && 
   echo "Hidden=true" >> /usr/share/applications/xfce4-session-logout.desktop && \
   echo "Hidden=true" >> /usr/share/applications/xfce4-web-browser.desktop && \
   echo "Hidden=true" >> /usr/share/applications/org.fcitx.fcitx5-migrator.desktop && \
-  sed -i 's/TerminalEmulator=debian-x-terminal-emulator/TerminalEmulator=xfce4-terminal/' /etc/xdg/xfce4/helpers.rc && \
+  sed -i 's/TerminalEmulator=debian-x-terminal-emulator/TerminalEmulator=xfce4-terminal/' /etc/xdg/xfce4/helpers.rc
 
 # ヘルスチェック
 HEALTHCHECK --interval=30s --timeout=5s --start-period=15s --retries=3 \
