@@ -100,7 +100,7 @@ guacd-port: 4822
 user-mapping: /etc/guacamole/user-mapping.xml
 EOF
 
-generate_config_file "/.config/user-mapping-template.xml" "/tmp/guacamole" "user-mapping.xml"
+generate_config_file "/usr/local/etc/user-mapping-template.xml" "/tmp/guacamole" "user-mapping.xml"
 
 # ==========================================
 # 6. ユーザー環境セットアップ
@@ -181,7 +181,7 @@ cat << 'EOF' | sudo -u "$USER_NAME" tee "$HOME_DIR/.config/autostart/desktop-set
 [Desktop Entry]
 Type=Application
 Name=XFCE Setup
-Exec=bash -c "/.config/desktop-setup.sh"
+Exec=bash -c "/usr/local/bin/desktop-setup.sh"
 Hidden=false
 NoDisplay=true
 X-GNOME-Autostart-enabled=true
@@ -191,7 +191,7 @@ fi
 CS_USER_DIR="/home/$USER_NAME/.local/share/code-server/User"
 if  [ ! -f "$CS_USER_DIR/settings.json" ]; then
     sudo -u "$USER_NAME" mkdir -p "$CS_USER_DIR"
-    sudo -u "$USER_NAME" cp /.config/settings.json "$CS_USER_DIR/settings.json"
+    sudo -u "$USER_NAME" cp /usr/local/etc/settings.json "$CS_USER_DIR/settings.json"
 fi
 CS_DATA_DIR="$HOME_DIR/.local/share/code-server"
 sudo -u "$USER_NAME" mkdir -p "$CS_DATA_DIR"
@@ -204,7 +204,7 @@ fi
 # ==========================================
 # 7. Supervisor の起動
 # ==========================================
-generate_config_file "/.config/supervisord-template.conf" "/tmp" "supervisord.conf"
+generate_config_file "/usr/local/etc/supervisord-template.conf" "/tmp" "supervisord.conf"
 if [ -z "$SUPERVISOR_LOG" ]; then
     echo "ERROR: SUPERVISOR_LOG environment variable is not set. Container stopped."
     exit 1
