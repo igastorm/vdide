@@ -197,7 +197,6 @@ CS_DATA_DIR="$HOME_DIR/.local/share/code-server"
 sudo -u "$USER_NAME" mkdir -p "$CS_DATA_DIR"
 
 if [ -f "/usr/local/bin/custom-setup.sh" ]; then
-    echo "Running custom setup script..."
     /usr/local/bin/custom-setup.sh
 fi
 
