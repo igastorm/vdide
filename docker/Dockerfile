@@ -291,7 +291,7 @@ RUN ARCH=$(uname -m) && \
   --install-extension llvm-vs-code-extensions.vscode-clangd \
   --install-extension ms-vscode.cmake-tools \
   --install-extension ms-vscode.hexeditor \
-  --install-extension /tmp/codelldb.vsix \ 
+  --install-extension /tmp/codelldb.vsix \
   --install-extension ms-python.python \
   --install-extension ms-python.debugpy \
   --install-extension charliermarsh.ruff && \
