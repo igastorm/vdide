@@ -31,7 +31,7 @@ ARG CODELLDB_ARM64_SHA512=d38a7a484c165638a5675a22b8e3fc9bda35f2c8cd2c72c290531f
 # ==========================================
 # Base image (common)
 # ==========================================
-FROM debian:trixie-slim@sha256:109e2c65005bf160609e4ba6acf7783752f8502ad218e298253428690b9eaa4b AS base
+FROM debian:trixie-slim@sha256:b6e2a152f22a40ff69d92cb397223c906017e1391a73c952b588e51af8883bf8 AS base
 
 # ==========================================
 # Stage 1: Base Builder (共通ビルド環境)
