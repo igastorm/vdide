@@ -208,8 +208,8 @@ if [ -z "$SUPERVISOR_LOG" ]; then
     echo "ERROR: SUPERVISOR_LOG environment variable is not set. Container stopped."
     exit 1
 fi
-SUPERVISOR_LOG="-s"
 if [ "$SUPERVISOR_LOG" = "on" ] || [ "$SUPERVISOR_LOG" = "ON" ]; then
-    SUPERVISOR_LOG=""
+    exec supervisord $SUPERVISOR_LOG -n -c /tmp/supervisord.conf
+else
+    exec supervisord -s -n -c /tmp/supervisord.conf
 fi
-exec supervisord $SUPERVISOR_LOG -n -c /tmp/supervisord.conf
