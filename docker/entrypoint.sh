@@ -209,7 +209,7 @@ if [ -z "$SUPERVISOR_LOG" ]; then
     exit 1
 fi
 if [ "$SUPERVISOR_LOG" = "on" ] || [ "$SUPERVISOR_LOG" = "ON" ]; then
-    exec supervisord $SUPERVISOR_LOG -n -c /tmp/supervisord.conf
+    exec supervisord -n -c /tmp/supervisord.conf
 else
     exec supervisord -s -n -c /tmp/supervisord.conf
 fi
